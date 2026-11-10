@@ -366,8 +366,10 @@ Do not require branch-reference lookups after that read. Missing authentication
 inputs are stopping points: ask which service and wait when it is unknown;
 obtain or request official instructions before proposing a known service's
 flow. The short environment
-context names the skill only for its relevant scenarios, rather than relying
-solely on description matching or loading its body every turn.
+context requires reading the complete skill before advice or actions in relevant
+scenarios, including observational questions. An unreadable skill blocks
+procedural advice; its name/catalog entry does not establish a tool capability.
+This avoids relying solely on description matching or loading its body every turn.
 It keeps the essential first-action prohibitions always present; skill loading
 selects detailed procedures, not whether those prohibitions apply.
 
@@ -388,12 +390,17 @@ real account, package registration, or scheduled task is involved.
 
 The fixture captures actual embedded-runner requests before the first tool,
 through a forced context-overflow/compaction retry, on the next turn, and in
-new, subagent-key, and cron-key sessions. It checks the complete two-sentence
+new, subagent-key, and cron-key sessions. It checks the complete short
 instruction block exactly once in system context and verifies that it is absent
 from user context, rather than just checking hook registration. It also checks
 plugin/hook opt-outs and unchanged user configuration and instruction files.
-It does not schedule cron jobs, spawn remote agents, evaluate model obedience,
-or prove attachment delivery/user-side filesystem access.
+It logs request-bound system byte counts/hashes and full-guidance counts/hashes
+for both agent and summary requests, without prompt contents. Summary admission
+is observed, not assumed to use the agent prompt contract. It checks discovery
+inside the actual `## Skills` section and its advice/observational triggers.
+It does not schedule cron jobs, spawn real children, evaluate model obedience,
+or prove attachment delivery/user-side filesystem access. A subagent-shaped
+session key is only wiring coverage, not actual-spawn proof.
 
 The same lane verifies the skill's advertised packaged location, absence of
 eager body injection, and a complete on-demand read of the self-contained
@@ -416,6 +423,13 @@ route, truthful completion, unsafe export requests, and authorized agent-only
 GUI work. These cases must not execute side effects. Evaluate actual responses
 and complete skill reads before claiming model-routing or safety compliance;
 the deterministic runtime lane is not a substitute.
+Keep the original 13 questions and answer keys unchanged for paired runs; a
+clarification deviation remains a deviation, not an updated expectation. Use
+fresh histories with the same effective model, thinking mode, tools, and budgets,
+and check complete skill reads before the first advice as well as before action.
+Include an actual spawned child and a representative post-compaction turn.
+Missing Shared must not become provisioning/remount advice, and an existing
+attachment acceptance must not become a new upload claim.
 Observations from one model do not qualify other models or backends and do not
 guarantee GUI automation, authentication, or delivery.
 
@@ -444,15 +458,18 @@ refusal/no-copy coverage. A selected supported root must work without a host
 report or the agent's default `Shared`. Human-folder cases must
 show no profile probes, access requests, or writes to either account's substitute
 folders; pair them with explicitly requested agent-local output and private
-headless work. Missing agent profiles/directories and denied access or failed
-copies must produce an explicit explanation and a request for a supported
-delivery route, not a Public Documents fallback, a newly created shared root,
-or permission changes.
+headless work. Missing agent profiles/directories, denied access, and failed
+copies must produce an explicit blocker. Offer only an existing supported root
+or an actually available client capability, not provisioning/remount/repair,
+Public Documents, a replacement root, or permission changes. A fully specified
+blocked-status question needs no destination-choice question.
 Separate copy success from verified recipient access. Repeat a representative case
 after observed real-model compaction.
-For in-chat requests, require a new attachment from the tested response before
-checking downloaded bytes; an older card cannot satisfy the case. Record
-corrective prompts and browser reloads separately from first-pass delivery.
+For new in-chat delivery requests, require a current attachment from the tested
+response before checking downloaded bytes; an older card cannot satisfy the case.
+An already accepted current-attachment status case must report that receipt, not
+upload again. Record corrective prompts and browser reloads separately from
+first-pass delivery.
 
 The plugin uses `before_prompt_build` with `appendSystemContext` to supply
 static instructions without adding a user-context copy. System context states

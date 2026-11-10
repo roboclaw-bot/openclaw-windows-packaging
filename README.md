@@ -680,8 +680,11 @@ It is not a blanket prohibition on agent-only GUI work.
 
 The plugin also bundles the
 [`windows-agent-handoff` skill](plugins/gateway-isolation/skills/windows-agent-handoff/SKILL.md).
-The short context names it for user-folder requests, GUI, sign-in, and file
-delivery. The isolated agent has no permission to write the human's actual
+The short context requires its complete read before advice or actions on
+user-folder requests, GUI, sign-in, and file delivery, including observational
+questions. If it cannot be read, the agent reports the blocker without inventing
+a route or tool. The catalog entry grants no additional capability. The isolated
+agent has no permission to write the human's actual
 Desktop, Documents, or Downloads. It must not probe human profiles, request
 broader access, or silently use the agent's similarly named folders. It can
 offer only the existing shared-folder contract or a supported download/attachment and
@@ -720,16 +723,20 @@ Verify that the result is an existing directory. `USERPROFILE` must belong to
 the isolated agent, not the interactive user; do not substitute the OpenClaw
 workspace/state directory or hard-code an account path. Before copying, display
 the complete destination in a fenced text code block rather than a filename-only
-chip, and offer another destination. Do not copy to a destination the user declines.
+chip, and offer another supported route. Do not copy to a destination the user declines.
 Copy only intended nonsensitive deliverables, preserving private originals and
 unrelated files. Agent-side access or a successful copy does not prove recipient
 access; verify it where feasible and state what remains unverified.
 If resolution, directory availability, access or copying fails, report the failure
-and ask for a supported destination. Do not fall back to Public Documents or
-`PUBLIC`/`TEMP`, create a replacement shared root, or change permissions.
+and offer only an existing supported destination or an actually available
+client delivery capability. Missing/denied Shared is not a handoff setup task:
+do not provision, remount, repair, request enablement, fall back to Public
+Documents or `PUBLIC`/`TEMP`, create a replacement root, or change permissions.
 For requested in-chat delivery, verify and attach the current file or explain
 the limitation; a saved copy, path, or earlier attachment is not delivery.
 Recipient filesystem access and client delivery require separate verification.
+An already accepted current attachment is reported as accepted, not submitted
+again or described as a new action in a status-only response.
 The prompt hook also respects `hooks.allowPromptInjection=false` and
 `hooks.allowConversationAccess=false` under the plugin's configuration entry.
 Coverage and the local-only runtime proof are described in

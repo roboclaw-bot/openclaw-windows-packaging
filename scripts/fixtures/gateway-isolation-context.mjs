@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import { once } from "node:events";
 import fs from "node:fs/promises";
 import http from "node:http";
@@ -89,12 +90,27 @@ const server = http.createServer(async (request, response) => {
     requestCount++;
     const summary = !body.tools?.length;
     console.log(`${scenario.name}: ${summary ? "summary" : "agent"} request ${requestCount}`);
+    const systemText = body.messages
+      .filter(message => ["system", "developer"].includes(message.role))
+      .map(message => typeof message.content === "string" ? message.content : JSON.stringify(message.content))
+      .join("\n");
+    const skillsSection = systemText.split(/(?=^## )/m)
+      .filter(section => /^## Skills\r?\n/.test(section)).join("\n");
+    const availableSkills = skillsSection.match(/<available_skills>[\s\S]*?<\/available_skills>/)?.[0] ?? "";
+    // Request-bound admission evidence, including summaries; never log prompt contents.
+    // Summary presence is observed, not assumed to share the agent prompt contract.
+    console.log(JSON.stringify({
+      scenario: scenario.name, request: requestCount, kind: summary ? "summary" : "agent",
+      systemBytes: Buffer.byteLength(systemText, "utf8"),
+      systemSha256: createHash("sha256").update(systemText).digest("hex"),
+      skillCatalogBytes: Buffer.byteLength(availableSkills, "utf8"),
+      skillCatalogSha256: createHash("sha256").update(availableSkills).digest("hex"),
+      guidanceCopies: systemText.split(instructions).length - 1,
+      guidanceBytes: Buffer.byteLength(instructions, "utf8"),
+      guidanceSha256: createHash("sha256").update(instructions).digest("hex"),
+    }));
     if (!summary) {
-      const systemText = body.messages
-        .filter(message => ["system", "developer"].includes(message.role))
-        .map(message => typeof message.content === "string" ? message.content : JSON.stringify(message.content))
-        .join("\n");
-      const advertisedSkill = systemText.match(
+      const advertisedSkill = skillsSection.match(
         /<skill>\s*<name>windows-agent-handoff<\/name>[\s\S]*?<location>(.*?)<\/location>[\s\S]*?<\/skill>/,
       );
       assert.equal(Boolean(advertisedSkill), scenario.skillAvailable,
@@ -109,6 +125,12 @@ const server = http.createServer(async (request, response) => {
         const description = advertisedSkill[0].match(/<description>([\s\S]*?)<\/description>/)?.[1];
         assert.ok(description?.includes("Desktop/Documents/Downloads"),
           "Runtime discovery must advertise human-folder handoff requests.");
+        assert.ok(description.length <= 160, "The rendered description must stay selective.");
+        for (const trigger of [/advice/, /actions/, /observational/, /delivery/, /GUI/, /sign-in/]) {
+          assert.match(description, trigger, "Discovery must include advice-only handoff requests.");
+        }
+        assert.equal([...skillsSection.matchAll(/<name>windows-agent-handoff<\/name>/g)].length, 1,
+          "The actual Skills section must advertise the packaged skill exactly once.");
         scenario.skillPath = advertisedSkill[1].replace(/^~(?=[\\/]|$)/, root);
         assert.equal(await fs.realpath(scenario.skillPath), await fs.realpath(skillReads[0].path),
           "Discovery must point to the packaged skill, not an ambient same-named copy.");
@@ -124,7 +146,6 @@ const server = http.createServer(async (request, response) => {
         }
       }
       // The pinned runtime exposes installed-skill reads under the ordinary read grant.
-      const availableSkills = systemText.match(/<available_skills>[\s\S]*?<\/available_skills>/)?.[0] ?? "";
       const expectedTools = availableSkills.includes("<skill>") && !scenario.skillReadDenied
         ? ["read", "skills_read"] : ["read"];
       assert.deepEqual(body.tools.map(tool => tool.function.name), expectedTools);
