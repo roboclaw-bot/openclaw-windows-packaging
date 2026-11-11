@@ -668,7 +668,7 @@ does not rewrite them. Direct-Node UI fixtures verify rendering and interactions
 not packaged-launcher isolation or installed upgrade behavior.
 
 The same plugin supplies agent instructions on Windows when the launcher report
-is exactly `enabled`. Its `before_prompt_build` hook supplies two sentences
+is exactly `enabled`. Its `before_prompt_build` hook supplies a short block
 explaining that local windows are invisible to the user, local file access does
 not imply user access, and essential credential, MFA/consent, ACL/isolation,
 human-GUI, and private-workspace prohibitions apply before any skill is loaded.
@@ -684,12 +684,15 @@ The short context requires its complete read before advice or actions on
 user-folder requests, GUI, sign-in, and file delivery, including observational
 questions. If it cannot be read, the agent reports the blocker without inventing
 a route or tool. The catalog entry grants no additional capability. The isolated
-agent has no permission to write the human's actual
-Desktop, Documents, or Downloads. It must not probe human profiles, request
-broader access, or silently use the agent's similarly named folders. It can
+agent has no permission to write any human profile directory or known-folder
+alias. Desktop, Documents, Downloads, Pictures/Photos, Music, and Videos are
+examples, not a closed list. Redirection, cloud sync, another drive, translated
+names, or a connected node do not grant access. It must not probe or resolve
+human folders, request broader access, or silently substitute agent folders. It can
 offer only the existing shared-folder contract or a supported download/attachment and
-must name the actual outcome. Explicitly requested agent-local output and
-ordinary private headless work remain local; they are not user delivery.
+must name the actual outcome. Explicitly requested private agent-local output,
+including the agent account's own Pictures, Music, or Videos, and ordinary private
+headless work remain local; they are not user delivery.
 OpenClaw advertises eligible skills and loads their instructions on demand;
 the detailed procedures are not inserted into every prompt. One successful
 `SKILL.md` read supplies the complete GUI/authentication, client delivery, and

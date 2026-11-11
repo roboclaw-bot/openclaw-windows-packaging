@@ -1,6 +1,6 @@
 ---
 name: windows-agent-handoff
-description: Read before advice/actions on Desktop/Documents/Downloads, delivery, GUI or sign-in in Windows isolation, even observational tasks; not private headless work.
+description: Read before advice/actions on all human profile folders (e.g. Photos), delivery, GUI or sign-in under isolation, even observational; not private headless work.
 metadata: {"openclaw":{"os":["win32"],"requires":{"env":["CLAWCTL_GATEWAY_ISOLATION"]}}}
 ---
 
@@ -102,15 +102,18 @@ change ACLs, elevate Explorer, or escape isolation to make a GUI visible.
 
 ## Human folders and agent-local output
 
-"My Desktop", "my Documents", and "my Downloads" mean the human user's folders,
-not the isolated agent account's similarly named folders. The agent has **no
-permission to write the human's actual folders**. This is a hard boundary, not a
-missing path or an approval opportunity. Do not probe human profiles, resolve
-human known folders, test access, request broader permissions, change ACLs, or
-route the write through a connected node, GUI, browser automation, or a
-"handoff" to the actual human folder. None is a supported bypass. Do not resolve
-the agent's Desktop, Documents, or Downloads and silently describe it as the
-user's destination.
+A request for "my" profile folder means the human's folder, not the isolated
+agent's similarly named folder. The agent has **no permission to write any human
+profile directory or known-folder alias**. Desktop, Documents, Downloads,
+Pictures/Photos, Music, and Videos are examples, not an exhaustive list.
+
+Redirection, cloud-backed sync, another drive, a translated name, or a connection
+does not change that human-profile boundary. Do not look up or probe the human
+folder to confirm where it lives, resolve its known-folder alias, test access,
+request broader permission, or change ACLs. A connected node, GUI, browser
+automation, or "handoff" is not a bypass. Do not silently substitute any agent
+profile folder. This is an isolation boundary, not a path-discovery or approval
+problem.
 
 1. State the limitation before any write: **"I can't write to your Desktop from
    this isolated session."** Use the requested folder name for other folders.
@@ -120,16 +123,17 @@ user's destination.
    bypass approval. If neither route is available, report the blocker under
    **Verification and recovery**, not a request to set one up.
 3. Once a supported route is selected, follow its procedure below and name its
-   exact outcome. A file delivered for the user to save themselves is not a file
-   written to their Desktop/Documents/Downloads.
+   exact outcome. A file delivered for the user to save themselves is not a
+   write to their requested profile folder.
 
-An explicit request for **agent-local** output is different: writing a private
-file in the agent's own Desktop/Documents/Downloads is permitted within the
-task's scope. Resolve only the agent's own selected folder, verify the exact
-file, and say **"Created in the isolated agent's Desktop, not your Desktop; it
-has not been delivered to you."** Include the actual path. Do not invoke Shared
-or an attachment unless delivery is also requested. Ordinary private headless
-work likewise needs no handoff or repeated isolation warning.
+An explicit request for **agent-local** output is different: a private file in
+the isolated agent account's own selected profile folder is permitted within
+task scope, including its Pictures, Music, or Videos. Resolve only that agent
+folder, verify the exact file, and identify the account and actual path: for
+example, **"Created in the isolated agent's Pictures, not yours; it has not been
+delivered to you."** Do not invoke Shared or an attachment unless delivery is
+also requested. Ordinary private headless work needs no handoff or repeated
+isolation warning.
 
 **Check:** the human-folder write remains blocked, or an explicitly requested
 agent-local result is labeled as such; no silent destination substitution occurs.
@@ -233,8 +237,10 @@ unsafe export request, or selection/evidence for an available alternative. A
 fully specified blocked-status question needs no clarification or retry promise.
 
 Never substitute a replacement root, Public Documents, `PUBLIC`/`TEMP`, human
-profiles, or agent-local Desktop/Documents/Downloads; never change ACLs, elevate
-Explorer, or weaken isolation. For partial delivery, identify each file's result.
+profiles, or private agent-local profile folders used as delivery substitutes.
+Existing supported Shared roots remain governed by **Filesystem copy**.
+Never change ACLs, elevate Explorer, or weaken isolation. For partial delivery,
+identify each file's result.
 Retry only the authorized failed part through a supported route, without
 overwriting unrelated files or claiming the whole handoff succeeded. Keep
 private originals intact.

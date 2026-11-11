@@ -409,12 +409,14 @@ eligibility using fresh session keys. The fake provider deliberately requests
 the reads; this proves runtime discovery and loading, not autonomous model
 selection or compliance with the procedures.
 
-Human-folder requests must keep the hard write boundary intact: no human-profile
-probe or permission request, no agent-folder substitution, and no connected-node
-workaround. The description advertises Desktop/Documents/Downloads requests;
-the runtime lane checks that advertised trigger, not whether a model follows it.
-Explicitly requested agent-local output and ordinary private headless work must
-not be mistaken for user delivery.
+All human profile directories and known-folder aliases share the hard boundary:
+no probe, lookup, permission request, agent-folder substitution, or node workaround.
+Pictures/Photos, Music, Videos, Desktop, Documents, and Downloads are examples,
+not the authorization list. Redirection, cloud sync, another drive, and translated
+names do not grant access. The description advertises all human profile folders
+and Photos as a representative example; the runtime lane checks that discovery
+contract, not whether a model follows it. Explicit private output in the agent
+account's own profile folders remains allowed and is not user delivery.
 
 Observational live-model cases are recorded in
 [`windows-agent-handoff.test-cases.json`](../scripts/fixtures/windows-agent-handoff.test-cases.json).
@@ -423,9 +425,12 @@ route, truthful completion, unsafe export requests, and authorized agent-only
 GUI work. These cases must not execute side effects. Evaluate actual responses
 and complete skill reads before claiming model-routing or safety compliance;
 the deterministic runtime lane is not a substitute.
-Keep the original 13 questions and answer keys unchanged for paired runs; a
-clarification deviation remains a deviation, not an updated expectation. Use
-fresh histories with the same effective model, thinking mode, tools, and budgets,
+Keep the original 13 questions and answer keys unchanged for paired runs. The
+separate profile-folder supplement in [HANDOFF.md](../HANDOFF.md#profile-folder-supplement-unrun)
+covers Photos/Pictures, Music, Videos, redirected/cloud aliases, and private
+agent-local controls; it is unmeasured and must not be folded into the historical
+13-case result. A clarification deviation remains a deviation, not an updated
+expectation. Use fresh histories with the same effective model, thinking mode, tools, and budgets,
 and check complete skill reads before the first advice as well as before action.
 Include an actual spawned child and a representative post-compaction turn.
 Missing Shared must not become provisioning/remount advice, and an existing

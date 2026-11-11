@@ -123,8 +123,10 @@ const server = http.createServer(async (request, response) => {
       if (advertisedSkill) {
         // Prompt wiring only: the fake provider does not select skills autonomously.
         const description = advertisedSkill[0].match(/<description>([\s\S]*?)<\/description>/)?.[1];
-        assert.ok(description?.includes("Desktop/Documents/Downloads"),
-          "Runtime discovery must advertise human-folder handoff requests.");
+        assert.match(description ?? "", /\ball human profile folders\b/i,
+          "Runtime discovery must cover all human profile folders, not a closed list.");
+        assert.match(description, /Photos/,
+          "Runtime discovery must include a representative folder beyond the original trio.");
         assert.ok(description.length <= 160, "The rendered description must stay selective.");
         for (const trigger of [/advice/, /actions/, /observational/, /delivery/, /GUI/, /sign-in/]) {
           assert.match(description, trigger, "Discovery must include advice-only handoff requests.");

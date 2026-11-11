@@ -61,7 +61,7 @@ test("supplies brief system-only local-session guidance without reading the conv
   assert.equal(text.split("\n\n")[0], "## Windows agent session");
   for (const boundary of [
     /isolated Windows agent session/, /GUI.*invisible/,
-    /Desktop\/Documents\/Downloads.*off-limits/,
+    /human profile folders.*off-limits/i,
     /no profile probes, access requests or agent-folder substitution/,
     /Private headless\/agent-local work stays local/,
     /Never solicit\/expose credentials/, /bypass MFA\/consent\/isolation/,
@@ -70,6 +70,15 @@ test("supplies brief system-only local-session guidance without reading the conv
   assert.deepEqual(hooks[0].handler(), result);
   result.appendSystemContext = "caller mutation";
   assert.equal(hooks[0].handler().appendSystemContext, text);
+});
+
+test("covers all human profile folders and redirected or cloud aliases in emitted guidance", () => {
+  const { hooks } = registerPlugin("enabled");
+  const boundary = hooks[0].handler().appendSystemContext.split("\n\n")[1];
+  assert.match(boundary, /\ball human profile folders\b/i);
+  for (const scope of [/redirected/, /cloud/, /aliases/, /off-limits/]) {
+    assert.match(boundary, scope);
+  }
 });
 
 test("requires a full skill read before advice as well as action, including observational tasks", () => {
