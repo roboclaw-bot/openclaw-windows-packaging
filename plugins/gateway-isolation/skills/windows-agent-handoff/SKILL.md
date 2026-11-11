@@ -6,188 +6,106 @@ metadata: {"openclaw":{"os":["win32"],"requires":{"env":["CLAWCTL_GATEWAY_ISOLAT
 
 # Windows Agent Handoff
 
-## Workflow
+## Decide from evidence, then stop or act
 
-1. Establish the execution boundary.
-   - Require current evidence of local Windows execution and `CLAWCTL_GATEWAY_ISOLATION=enabled`.
-     Use supplied facts; if an authorized check is needed, inspect only that value.
-     Absent/invalid evidence means uncertainty, not permission to provision/repair.
-   - A target named `host`/`gateway`, connectivity, or this skill's catalog entry
-     proves no interactive session, filesystem access, or tool capability. This
-     skill is instructions, not a handoff service or extra tools.
-   - **Check:** location/boundary is established or execution evidence is requested.
+1. Establish the facts without turning them into new actions.
+   - Establish local Windows execution and exactly
+     `CLAWCTL_GATEWAY_ISOLATION=enabled` from supplied facts or an authorized
+     check of that value only. Missing evidence means ask where execution occurs,
+     not infer it from Windows alone or provision/repair a session.
+   - Keep **recorded results** separate from **current capabilities**. Attribute
+     supplied/previously observed copy, hash, and acceptance results: "According
+     to the supplied result", not "I checked/re-verified" unless a current tool
+     performed that check. Historical acceptance can remain true when current
+     tools cannot upload; it is not a new-action capability.
+   - For a new action, require its actually available tool/schema or documented
+     connected-client capability, execution location, and exact authorization.
+     A skill/catalog entry, `host`/`gateway` target, connection, profile path, or
+     user permission supplies none of those missing capabilities.
+   - **Check:** know which facts are supplied, previously observed, or checked now;
+     distinguish unknown capability from explicitly unavailable capability.
 
-2. Classify the request before selecting a procedure below.
-   - Observational/hypothetical/status-only: use supplied facts; describe the next
-     supported action or evidenced result, without checks, copies, uploads,
-     retries, or new-action claims. Explain alternatives conditionally, without
-     demanding a choice just to explain them. Ask only for missing inputs required
-     by the relevant section: service, nonsensitive files, or an unresolved
-     human-folder alternative; not permission to execute a hypothetical plan.
-   - Execution: establish the exact file/user action and actual tool schemas/client
-     capabilities. Obtain any needed destination choice before acting; an already
-     approved supported selection needs no redundant confirmation.
-   - Apply the human-folder section before any lookup; combined GUI/sign-in and
-     delivery must satisfy both procedures. All branches are inline.
-   - Private headless/explicitly agent-local work needs no export or repeated
-     warning. Established remote-node work without local-to-user handoff stays remote.
-   - **Check:** the route fits the requested outcome and explanation/execution mode.
+2. Apply **Account and privacy boundaries**, then select the response below.
+   Observational/hypothetical/status-only means explanation from supplied facts:
+   no filesystem checks, creation, copies, uploads, or retries. Reading this skill
+   is not checking a file or delivering it. In execution mode, use only the scoped
+   available action. Combined sign-in/GUI and delivery must satisfy both routes.
+   For delivery, matching terminal status/blocker rows precede choice/action rows;
+   an explicit additional action must satisfy current action checks. Still state
+   any applicable boundary or unsafe-export refusal.
 
-3. Execute only the authorized part; respect declined destinations/actions.
-   Keep private originals, caches, repositories, credentials, and unrelated files
-   private. A supported handoff grants no broader filesystem/node access.
-   On denial, missing capability, or partial completion, use **Verification and recovery**.
-   - **Check:** each side effect is in scope, or this remains explanation only.
+   | State | Response and stopping point |
+   | --- | --- |
+   | Sign-in service unknown | Explain the invisible local dialog; ask "Which service are you signing into?" **Stop**, before flow examples, CLI/device-code/OAuth advice, or URLs. |
+   | Current requested submission already accepted for the exact revision, with no explicit additional action requested | Attribute and report existing acceptance and receipt limits. **Stop**: no unsolicited re-attachment, retry offer, or question. Current tools need not repeat historical acceptance. |
+   | All delivery routes unavailable/failed, no existing alternative | Name blocked routes, current nondelivery, and no human-folder write; retain the original. **Stop**: no setup/repair/remount, tool/channel restoration, retry promise, or enablement question. |
+   | Unsafe workspace/credential export | Refuse export/bypass, name the failed destination. Ask for intended nonsensitive files and an existing supported destination, not new capability. With all routes unavailable, use the blocker above. |
+   | Human-folder request, alternative unselected | State the boundary; offer an evidenced existing supported route and ask whether to use it; **wait**. If availability is unknown, ask for an existing supported selection/evidence, not setup or profile access. |
+   | Other explanation/status | Give evidenced status or a conditional next supported action and unverified outcomes; **stop**. No execution-permission, file-path, or destination-confirmation question merely to explain. |
+   | Actual action requested | Ask only for missing service, intended nonsensitive files, or supported selection/evidence and wait; otherwise perform the scoped available action below, verify, report, and stop. Respect declined actions/destinations. |
 
-4. Report only evidenced outcomes. Creation, verified copy, recipient read access,
-   accepted attachment, actual download/open, and human-folder write are distinct;
-   none implies the next. Name unverified results and concrete blockers.
-   - **Check:** command success alone proves no visible GUI, sign-in, or delivery.
+   A no-attachment explanation may describe a shared copy **conditional on
+   availability and selection**, without requesting either just to explain.
+   A human-folder request still needs its alternative-choice question, unless
+   all routes are explicitly unavailable. An approved valid root needs no
+   redundant confirmation.
+   **Check:** explanation stays explanation; stopped routes stay stopped.
 
-## GUI and human participation
+3. Report only the evidence level reached. Creation, verified copy, recipient
+   filesystem access, accepted attachment, actual client open/download, and a
+   human-folder write are separate facts; none implies the next. Attribute supplied
+   results and identify unverified outcomes. For partial work, name each file's
+   result. Command success alone proves no GUI operation, sign-in, or delivery.
+   **Check:** every requested result has evidence or a concrete blocker, not an
+   invented capability or a claim of a new check/action.
 
-Local dialogs and browser windows belong to the isolated agent session, not
-the user's interactive desktop. Do not launch or offer a local window for
-human viewing or input, even if asked to open a sign-in dialog. Explain the
-limitation only when it affects the task.
+## Account and privacy boundaries
 
-Authorized agent-only GUI work is allowed when no human viewing or input is
-needed. Verify a suitable automation tool is actually available, establish its
-execution session, and check its result. Creating a process is not proof that
-automation worked. Close only task-created windows or processes when finished;
-do not terminate unrelated work.
+"My" profile folder means the human's, not the isolated agent's similarly named
+folder. The agent has **no permission to write any human profile directory or
+known-folder alias**. Desktop, Documents, Downloads, Pictures/Photos, Music, and
+Videos are examples, not a closed list. Redirection, cloud sync, another drive,
+translated names, or connectivity do not change this boundary.
 
-**Check:** know the viewer/operator and actual tool capabilities before GUI work.
+Never look up/probe a human profile, resolve its known-folder aliases, test access,
+request profile access, change ACLs, or elevate Explorer. A node, local GUI, browser
+automation, or "handoff" cannot bypass the boundary. State "I can't write to your
+[requested folder] from this isolated session" before selecting a supported
+alternative. Do not resolve either account's substitute folder for that request.
+A file the user can save themselves is not a write to their requested folder.
 
-## Authentication
+Explicit **private agent-local output** is allowed within scope, including the
+agent's own Desktop, Documents, Downloads, Pictures, Music, or Videos. Resolve
+only that agent's selected folder and verify the requested content when executing.
+Identify the account and actual path, and say it has not been delivered. Do not
+guess identity from an account name or path shape. Ordinary private headless work
+and established remote work without local-to-user handoff stay in their existing
+workflow, without forced export or repeated isolation warnings.
 
-1. If the service is unknown, explain that a local sign-in dialog cannot reach
-   the user's desktop, ask one concrete question such as **"Which service are
-   you signing into?"**, then wait for the answer. End the turn there; do not
-   propose an authentication flow or request secrets.
-2. For a known service, prefer its documented CLI, headless, device-code, or
-   text flow. If official sign-in instructions are unavailable, obtain them
-   or ask the user for the official instructions and wait before proposing a
-   flow. Do not substitute guessed URLs, device codes, or flows, or promise
-   that a local window will reach the user.
-3. Give concise steps for the user's own desktop or a supported connected
-   client. Relay a safe verification URL only when the documented flow
-   provides it; relay sensitive verification material only through a supported
-   private route to the requesting user.
-4. Do not ask for passwords, session cookies, access tokens, recovery codes,
-   or MFA secrets in chat. Never fabricate a device-code flow, bypass MFA or
-   consent, disable isolation, or change security policy.
-5. Wait for the required user action. User confirmation alone is not proof of
-   agent-side authentication: use the service's supported status or account
-   check without printing secrets. If it fails or expires, report the actual
-   failure and offer the documented retry.
-
-**Check:** the intended authenticated state has service evidence, or remaining
-participation/blockers are explicit. An opened window or code is not proof of sign-in.
-
-## Remote or user-session UI
-
-A connected node may have its own desktop, filesystem, and automation tools.
-It does not grant this agent human-profile write access or make a gateway-local
-path available there. Do not use a node to reroute a blocked human-folder write.
-Before using it for a separately authorized action, establish the selected node,
-execution location, available capability, and authorization for the exact action. Do not transfer an
-agent-local file path or assume that `host` means the user's desktop.
-
-Use a verified, authorized UI route when available; otherwise provide user-side
-steps or a supported headless route. Do not install remote-control tools,
-change ACLs, elevate Explorer, or escape isolation to make a GUI visible.
-
-**Check:** selected-environment evidence supports user-visible results; connectivity does not.
-
-## Human folders and agent-local output
-
-A request for "my" profile folder means the human's folder, not the isolated
-agent's similarly named folder. The agent has **no permission to write any human
-profile directory or known-folder alias**. Desktop, Documents, Downloads,
-Pictures/Photos, Music, and Videos are examples, not an exhaustive list.
-
-Redirection, cloud-backed sync, another drive, a translated name, or a connection
-does not change that human-profile boundary. Do not look up or probe the human
-folder to confirm where it lives, resolve its known-folder alias, test access,
-request broader permission, or change ACLs. A connected node, GUI, browser
-automation, or "handoff" is not a bypass. Do not silently substitute any agent
-profile folder. This is an isolation boundary, not a path-discovery or approval
-problem.
-
-1. State the limitation before any write: **"I can't write to your Desktop from
-   this isolated session."** Use the requested folder name for other folders.
-2. Offer only the existing Shared-folder contract or an actually supported
-   download/attachment. If an available alternative has not been authorized,
-   ask whether the user wants it and wait; no human-folder access request or
-   bypass approval. If neither route is available, report the blocker under
-   **Verification and recovery**, not a request to set one up.
-3. Once a supported route is selected, follow its procedure below and name its
-   exact outcome. A file delivered for the user to save themselves is not a
-   write to their requested profile folder.
-
-An explicit request for **agent-local** output is different: a private file in
-the isolated agent account's own selected profile folder is permitted within
-task scope, including its Pictures, Music, or Videos. Resolve only that agent
-folder, verify the exact file, and identify the account and actual path: for
-example, **"Created in the isolated agent's Pictures, not yours; it has not been
-delivered to you."** Do not invoke Shared or an attachment unless delivery is
-also requested. Ordinary private headless work needs no handoff or repeated
-isolation warning.
-
-**Check:** the human-folder write remains blocked, or an explicitly requested
-agent-local result is labeled as such; no silent destination substitution occurs.
-
-## Deliverable and channel
-
-Identify the exact current file, intended recipient, and requested outcome:
-in-chat attachment, client download/export, or recipient-accessible filesystem
-copy. Verify that the file exists and contains the intended output. Do not
-substitute an old attachment, filename, path, saved copy, or local file link
-for delivery.
-
-Keep scratch files, dependencies, repositories, caches, and private originals
-private. Hand off only requested nonsensitive deliverables, never a whole
-workspace or credential database. Resolve possible secrets or private
-configuration before exporting.
-
-**Check:** the verified current artifact and intended delivery route are known.
-
-## Client attachment or export
-
-Use the current client's documented attachment/export capability and actual
-tool schema. Do not invent an attachment tool or claim delivery from the
-existence of a local file.
-
-If unavailable, explain that in-chat delivery is blocked. Describe only a
-supported alternative, conditional on its availability and selection; do not
-silently copy or require a destination choice just to describe the next step.
-Use **Verification and recovery** when no supported route exists.
-
-Verify that an attachment/export result identifies the current artifact, not
-just its filename. If that exact revision was already accepted, report the
-existing acceptance; do not submit again or say "I am attaching it now." Verify
-recipient-side open/download and exact bytes when evidence is available. Without
-it, say **"The current report was accepted for attachment; receipt is unverified.
-I did not write to your Downloads."** when Downloads was requested, adjusting
-the folder and outcome to the evidence. Never infer where the browser saved it.
-
-**Check:** evidence matches the current file and requested channel, or the limitation is explicit.
+Export only the intended nonsensitive deliverables. Keep private originals,
+repositories, scratch files, dependencies, caches, credentials, and unrelated
+files private; resolve possible secrets/private configuration before exporting.
+Never export the whole workspace or credential databases, weaken isolation,
+or use Public Documents, `PUBLIC`/`TEMP`, replacement roots, or private agent
+profile folders as delivery substitutes. **Existing supported agent
+`USERPROFILE\Shared` and approved supported shared roots are not prohibited**;
+they follow the filesystem contract below. This skill creates no delivery service
+and grants no broader filesystem/node authority.
 
 ## Filesystem copy
 
-1. Prefer a host-reported shared root or an approved user-selected existing
-   supported shared root. For user selection, establish the exact selected root
-   and concrete evidence that it is a supported shared destination; a folder
-   name, user permission, or agent write access alone is insufficient. Selection
-   never grants human-profile access: reject those paths without probing them.
-   A host-reported path alone does not prove recipient access. A valid selected
-   supported root needs no host report or default Shared: do not reject it or
-   resolve the default merely because the default is missing. Do not run host
-   lifecycle commands inside the agent to discover a shared root.
-2. If neither a host-reported shared root nor an approved user-selected supported
-   root is supplied, resolve the agent account's existing `Shared` folder with a
-   local tool in the isolated Windows agent:
+For an authorized copy, or conditionally when explaining one:
+
+1. Establish the exact current nonsensitive file, recipient, and intended outcome;
+   verify source existence/content before execution. Select a host-reported shared
+   root or an approved user-selected **existing supported** shared root. Selection
+   requires the exact root and concrete
+   sharing evidence for this agent/requester: a folder name, permission, or agent
+   write access alone is insufficient. Reject human-profile selection without
+   probing. A valid selected root requires neither a host report nor default Shared.
+   Do not run host lifecycle commands inside the agent to discover a destination.
+2. Only if neither root was supplied, resolve this agent's **existing** Shared
+   with a local tool in the isolated Windows agent:
 
    ```powershell
    $shared = (Resolve-Path -LiteralPath (Join-Path $env:USERPROFILE 'Shared') -ErrorAction Stop).Path
@@ -197,61 +115,84 @@ the folder and outcome to the evidence. Never infer where the browser saved it.
    $shared
    ```
 
-   Use this agent's `USERPROFILE`, not the human user's profile.
-   Never substitute OpenClaw workspace/state or hard-code an account path.
-3. Verify that the selected root exists and the resolved file destination stays
-   inside it; reject parent traversal or links redirecting outside it. Before
-   copying, show the complete resolved destination in a fenced `text` code block,
-   not an inline path or filename-only link. Offer another
-   supported delivery route and respect any destination the user declines.
-   Do not offer the human's profile folders as selectable alternatives.
-4. Copy rather than move the intended files. Preserve unrelated destination
-   files and do not overwrite without explicit approval. For concurrent or
-   existing deliveries, use a new nonconflicting destination or ask which
-   version the user wants replaced.
-5. Re-read the copy and compare it with the current source using exact bytes
-   or hashes. A successful copy proves neither recipient access nor client
-   delivery; verify those separately where possible and state what remains
-   unverified. Say **"Copied to the shared folder at [actual path]; I did not
-   write to your Desktop."** when Desktop was requested. Use the requested
-   folder name otherwise, and state any unverified recipient access.
+   Use the agent's current `USERPROFILE`, not a human profile, remembered account,
+   host environment, OpenClaw workspace/state, or upstream default directory.
+3. Require an existing root and a contained resolved destination, with no parent
+   traversal or links redirecting outside it. Before copying, show the **complete
+   destination in a fenced `text` block**, not just an inline path or filename chip.
+   Do not repeat confirmation of an already approved valid destination.
+4. Copy, **not move**, only the requested current files. Preserve private originals
+   and unrelated destination files. Never overwrite without explicit approval;
+   choose a nonconflicting destination or ask which version may be replaced.
+5. Re-read the copy and compare exact bytes or hashes with the **current** source.
+   Report the actual path and no write to the originally requested human folder.
+   Copy/hash success or a host-reported path does not prove recipient read access;
+   check it separately when available. Client receipt also needs separate evidence.
 
-**Check:** approved copied bytes match, the private original stays intact,
-and the report distinguishes copying from recipient access.
+**Check:** source retained, intended copied bytes match, and access/receipt limits
+are explicit. Missing/denied Shared or failed copy is a blocked route, not setup:
+never create, provision, repair, remount, or ask to enable it. Use only another
+existing supported route if actually available and selected; otherwise apply the
+terminal blocker above. Retry only an authorized failed part through such a route,
+not during an observational/status response.
 
-## Verification and recovery
+## Client attachment or export
 
-When resolution, availability, access, copying, or client delivery fails, name
-the failed destination/capability and what was not delivered. Missing or denied
-Shared is a blocked route, **not a setup task**: do not create, provision,
-remount, repair, or ask the user to enable it as this handoff's next step. Do not
-propose an unavailable Shared or attachment capability as ready.
+For a **new** attachment/export, require the current client's documented capability
+and actual tool schema plus the selected exact current artifact and recipient.
+Verify the file and intended content; an old card, same filename, path, saved copy,
+or local file link is not delivery of this revision. No available tool means no
+new in-chat submission. Do not assert "I can send it" from a skill or connection.
 
-The only alternative is another **existing supported** shared root with the
-evidence required above, or an **actually available supported** download/attachment.
-If neither exists, report that no supported delivery route is available, nothing
-was delivered there, and no human-folder write occurred; retain the private
-original. Do not request new tools, host/session repair, or channel configuration.
-Ask only for genuinely missing inputs: intended nonsensitive files after an
-unsafe export request, or selection/evidence for an available alternative. A
-fully specified blocked-status question needs no clarification or retry promise.
+Use the result identifying the exact revision. Existing acceptance ends the
+current satisfied submission, not a later explicitly requested additional action.
+The original "attach it here" request plus its acceptance is not a new resend
+request. Do not offer an unsolicited repeat. If a later request explicitly adds a
+resend, recipient/channel, or other operation, re-establish current capability/schema,
+exact artifact, recipient, channel, and authorization before that new operation;
+prior acceptance/authority does not authorize it. Otherwise use the terminal
+acceptance response above, for example:
+"According to the supplied result, the current report was accepted for
+attachment; receipt is unverified. I did not write to your Downloads." Check
+recipient-side open/download and exact bytes only when that evidence is available;
+never infer where the browser saved it.
 
-Never substitute a replacement root, Public Documents, `PUBLIC`/`TEMP`, human
-profiles, or private agent-local profile folders used as delivery substitutes.
-Existing supported Shared roots remain governed by **Filesystem copy**.
-Never change ACLs, elevate Explorer, or weaken isolation. For partial delivery,
-identify each file's result.
-Retry only the authorized failed part through a supported route, without
-overwriting unrelated files or claiming the whole handoff succeeded. Keep
-private originals intact.
+**Check:** report acceptance, actual receipt/download, and save location only at
+their evidenced levels. Unavailable delivery is not an invitation to restore/enable
+a channel, install tools, repair a host/session, or substitute a private folder.
+Separate administration requires its own actual request, not an invented handoff
+next step.
 
-**Check:** every requested artifact has a verified result or a named blocker.
+## GUI, sign-in, and remote UI
 
-## Source freshness
+Local dialogs/browser windows belong to the isolated agent session, not the
+human's interactive desktop. Never launch **or offer** one for human viewing or
+input. Explain when relevant; this does not prohibit all GUI work.
 
-The current tool schemas, connected-client capabilities, and the service's
-official sign-in instructions govern execution. Read them when a route is
-unknown or has changed; do not invent tool parameters or authentication flows.
-`CLAWCTL_GATEWAY_ISOLATION` is a launcher report, not an authorization grant.
-Use the agent's current profile and observed paths, never a remembered account
-name, host environment, or upstream default directory.
+- **Private agent-only GUI:** allowed when authorized and no human viewing/input
+  is needed. Establish actual automation capability and execution session; verify
+  the operation/render result, not process creation. Close only task-created
+  windows/processes, not unrelated work.
+- **Sign-in:** when service is unknown, use the terminal question above. Once
+  known, obtain official instructions before choosing its documented
+  CLI/headless/device-code/text flow and an actually supported input route. If
+  instructions are unavailable, obtain/request them and wait. Never guess flows,
+  URLs, or codes. Give concise user-side steps only for that verified flow; relay
+  a safe verification URL only if provided, and sensitive verification material
+  only through a supported private route to the requester. Never ask for
+  passwords, cookies, tokens, recovery codes, or MFA secrets in chat; never bypass
+  MFA, consent, or security policy. Wait for user action, then use supported
+  service status/account evidence without printing secrets. User confirmation,
+  a window, or a code is not authentication proof. Report failure/expiry and
+  offer only the documented retry.
+- **Established remote/user-session UI:** a node may have its own desktop and
+  filesystem. For a separately authorized action, establish selected node,
+  execution location, actual tools, and exact authorization. Do not assume
+  `host` is the human's desktop or transfer an agent-local path as a remote path.
+  Never reroute a blocked human-folder write, install remote control, elevate,
+  change ACLs, or escape isolation to make GUI visible. Without a verified
+  authorized UI route, provide supported user-side steps or a documented
+  headless route, subject to the sign-in stop rule.
+
+**Check:** report session/tool/service evidence or a blocker, not success inferred
+from a process, connection, permission, or instruction text.

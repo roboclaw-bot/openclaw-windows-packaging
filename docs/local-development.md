@@ -433,8 +433,19 @@ agent-local controls; it is unmeasured and must not be folded into the historica
 expectation. Use fresh histories with the same effective model, thinking mode, tools, and budgets,
 and check complete skill reads before the first advice as well as before action.
 Include an actual spawned child and a representative post-compaction turn.
-Missing Shared must not become provisioning/remount advice, and an existing
-attachment acceptance must not become a new upload claim.
+Missing Shared must not become provisioning/remount or tool/channel-restoration
+advice. With no existing supported route, report nondelivery and stop. Existing
+exact-revision attachment acceptance is a historical status fact even if the
+current read-only scope cannot upload. For an already satisfied submission with
+no explicit additional action, report its receipt limits and stop, without a new
+upload or retry offer. A later explicit resend or additional recipient/channel
+requires current capability, exact artifact, recipient/channel, and authorization
+checks again; the original request plus its acceptance is not a new resend request.
+Attribute supplied copy/hash facts instead of
+claiming a current check. Explanation-only requests do not solicit execution
+permission, but required service, nonsensitive-file, and unresolved human-folder
+alternative questions remain valid. Judge these advice/claim outcomes separately
+from skill-read counts; structural tests do not qualify the new skill wording.
 Observations from one model do not qualify other models or backends and do not
 guarantee GUI automation, authentication, or delivery.
 
