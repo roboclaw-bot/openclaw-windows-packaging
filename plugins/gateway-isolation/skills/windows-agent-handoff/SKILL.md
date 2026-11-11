@@ -38,17 +38,19 @@ metadata: {"openclaw":{"os":["win32"],"requires":{"env":["CLAWCTL_GATEWAY_ISOLAT
    | --- | --- |
    | Sign-in service unknown | Explain the invisible local dialog; ask "Which service are you signing into?" **Stop**, before flow examples, CLI/device-code/OAuth advice, or URLs. |
    | Current requested submission already accepted for the exact revision, with no explicit additional action requested | Attribute and report existing acceptance and receipt limits. **Stop**: no unsolicited re-attachment, retry offer, or question. Current tools need not repeat historical acceptance. |
-   | All delivery routes unavailable/failed, no existing alternative | Name blocked routes, current nondelivery, and no human-folder write; retain the original. **Stop**: no setup/repair/remount, tool/channel restoration, retry promise, or enablement question. |
+   | All existing supported delivery routes explicitly unavailable/failed/declined | Name blocked routes, current nondelivery, and no human-folder write; retain the original. **End the delivery branch**: no private-output alternative, path/enablement question, setup/repair/remount, tool/channel restoration, retry promise, or future offer. |
    | Unsafe workspace/credential export | Refuse export/bypass, name the failed destination. Ask for intended nonsensitive files and an existing supported destination, not new capability. With all routes unavailable, use the blocker above. |
    | Human-folder request, alternative unselected | State the boundary; offer an evidenced existing supported route and ask whether to use it; **wait**. If availability is unknown, ask for an existing supported selection/evidence, not setup or profile access. |
    | Other explanation/status | Give evidenced status or a conditional next supported action and unverified outcomes; **stop**. No execution-permission, file-path, or destination-confirmation question merely to explain. |
    | Actual action requested | Ask only for missing service, intended nonsensitive files, or supported selection/evidence and wait; otherwise perform the scoped available action below, verify, report, and stop. Respect declined actions/destinations. |
 
    A no-attachment explanation may describe a shared copy **conditional on
-   availability and selection**, without requesting either just to explain.
-   A human-folder request still needs its alternative-choice question, unless
-   all routes are explicitly unavailable. An approved valid root needs no
-   redundant confirmation.
+   availability and selection**, without requesting either just to explain; never
+   revive an explicitly unavailable or declined route. A human-folder
+   request still needs its alternative-choice question unless all routes are
+   explicitly unavailable. An approved valid root needs no redundant confirmation.
+   A later user-supplied qualified existing root or explicit new scope is assessed
+   against current capability and authorization; a blocker is not a permanent ban.
    **Check:** explanation stays explanation; stopped routes stay stopped.
 
 3. Report only the evidence level reached. Creation, verified copy, recipient
@@ -74,9 +76,13 @@ automation, or "handoff" cannot bypass the boundary. State "I can't write to you
 alternative. Do not resolve either account's substitute folder for that request.
 A file the user can save themselves is not a write to their requested folder.
 
-Explicit **private agent-local output** is allowed within scope, including the
-agent's own Desktop, Documents, Downloads, Pictures, Music, or Videos. Resolve
-only that agent's selected folder and verify the requested content when executing.
+**Private agent-local output** requires explicit user intent, including an already
+expressed conditional such as "if delivery is unavailable, keep a private agent
+copy." A failed human-folder/delivery request does not supply that intent: do not
+offer private output or ask a leading private-path question to change the outcome.
+Within that explicit scope, the agent's own Desktop, Documents, Downloads, Pictures,
+Music, or Videos is allowed. Resolve only that agent's selected folder and verify
+the requested content when executing.
 Identify the account and actual path, and say it has not been delivered. Do not
 guess identity from an account name or path shape. Ordinary private headless work
 and established remote work without local-to-user handoff stay in their existing
@@ -104,8 +110,10 @@ For an authorized copy, or conditionally when explaining one:
    write access alone is insufficient. Reject human-profile selection without
    probing. A valid selected root requires neither a host report nor default Shared.
    Do not run host lifecycle commands inside the agent to discover a destination.
-2. Only if neither root was supplied, resolve this agent's **existing** Shared
-   with a local tool in the isolated Windows agent:
+2. Only if neither root was supplied **and this agent's Shared is not known
+   unavailable or declined**, resolve its **existing** Shared with an authorized
+   local tool in the isolated Windows agent. An omitted root does not authorize
+   probing/retrying a missing, denied, failed, or declined Shared:
 
    ```powershell
    $shared = (Resolve-Path -LiteralPath (Join-Path $env:USERPROFILE 'Shared') -ErrorAction Stop).Path
@@ -131,10 +139,10 @@ For an authorized copy, or conditionally when explaining one:
 
 **Check:** source retained, intended copied bytes match, and access/receipt limits
 are explicit. Missing/denied Shared or failed copy is a blocked route, not setup:
-never create, provision, repair, remount, or ask to enable it. Use only another
-existing supported route if actually available and selected; otherwise apply the
-terminal blocker above. Retry only an authorized failed part through such a route,
-not during an observational/status response.
+never create, provision, repair, remount, or ask to enable it. Select another
+existing supported route only under the decision rows above. Retry only an
+authorized failed part through an available selected route, not during an
+observational/status response.
 
 ## Client attachment or export
 

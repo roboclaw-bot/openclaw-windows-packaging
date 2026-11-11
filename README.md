@@ -715,7 +715,9 @@ The host reports `session.sharedFolder` through `clawctl status --json` in the
 user's normal terminal; that command can start the recorded session.
 The skill names the isolated agent's existing `Shared` folder as a handoff
 option when neither a host-reported root nor an approved user-selected supported
-root is supplied. Resolve it with a local tool inside that agent session, for
+root is supplied and that agent's Shared is not known unavailable or declined.
+Missing root information does not authorize probing a known failed route. When
+eligible, resolve it with an authorized local tool inside that agent session, for
 example:
 
 ```powershell
@@ -735,6 +737,12 @@ and offer only an existing supported destination or an actually available
 client delivery capability. Missing/denied Shared is not a handoff setup task:
 do not provision, remount, repair, request enablement, fall back to Public
 Documents or `PUBLIC`/`TEMP`, create a replacement root, or change permissions.
+When all existing supported routes are explicitly unavailable, report nondelivery,
+no human-folder write, and retention of the original, then stop without a private
+output substitute, path question, or future offer. Private agent output requires
+explicit user intent, which may already include a conditional fallback request;
+it is not inferred from failed delivery. A later qualified existing root or new
+explicit scope is assessed against current capability and authorization.
 For requested in-chat delivery, verify and attach the current file or explain
 the limitation; a saved copy, path, or earlier attachment is not delivery.
 Recipient filesystem access and client delivery require separate verification.

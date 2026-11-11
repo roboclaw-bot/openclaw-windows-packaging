@@ -434,7 +434,13 @@ expectation. Use fresh histories with the same effective model, thinking mode, t
 and check complete skill reads before the first advice as well as before action.
 Include an actual spawned child and a representative post-compaction turn.
 Missing Shared must not become provisioning/remount or tool/channel-restoration
-advice. With no existing supported route, report nondelivery and stop. Existing
+advice. With all existing supported routes explicitly unavailable, report
+nondelivery, no human-folder write, and retention of the original, then end the
+delivery response without a private-output alternative, path question, or future
+offer. Private output requires explicit user intent, including an already
+expressed conditional fallback; failed human delivery does not supply that intent.
+A later qualified existing root or explicit new scope needs current capability
+and authorization, not a permanent refusal. Existing
 exact-revision attachment acceptance is a historical status fact even if the
 current read-only scope cannot upload. For an already satisfied submission with
 no explicit additional action, report its receipt limits and stop, without a new
@@ -460,7 +466,8 @@ retained proof.
 Include similar filenames, earlier attachments, and changed contents at the same
 path; compare the actual downloaded bytes with the requested revision. Pair
 missing or misleading sharing hints with an explicit host-reported destination.
-For a filesystem request with no destination, capture the agent's local tool
+For a filesystem request with no supplied root and no known unavailability or
+decline of the agent's Shared, capture the authorized agent-local tool
 invocation and result resolving its own `$env:USERPROFILE\Shared`, for example
 `(Resolve-Path -LiteralPath (Join-Path $env:USERPROFILE 'Shared') -ErrorAction Stop).Path`;
 an independent harness lookup is not a substitute for model-side resolution.
